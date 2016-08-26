@@ -1,25 +1,25 @@
 FROM ausov/docker-ci-node
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk add --no-cache --no-progress \
-        php7 \
-        php7-dom \
-        php7-ctype \
-        php7-curl \
-        php7-fpm \
-        php7-gd \
-        php7-intl \
-        php7-json \
-        php7-mbstring \
-        php7-mcrypt \
-        php7-mysqlnd \
-        php7-opcache \
-        php7-pdo \
-        php7-pdo_mysql \
-        php7-posix \
-        php7-session \
-        php7-xml \
-        php7-iconv \
-        php7-phar \
-        php7-openssl && \
-    ln -s /usr/bin/php7 /usr/bin/php
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    export LC_ALL=C.UTF-8 && \
+    echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.org.list && \
+    echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.org.list && \
+    wget -O- http://www.dotdeb.org/dotdeb.gpg | apt-key add - && \
+    apt-get update && \
+    apt-get install -y \
+        php7.0-sqlite \
+        php7.0-curl \
+        php7.0-gd \
+        php7.0-gmp \
+        php7.0-mcrypt \
+        php7.0-intl \
+        php7.0-dev \
+        php7.0-xsl \
+        php7.0-xml \
+        php7.0-bcmath \
+        php-pear && \
+  apt-get clean && apt-get autoclean && apt-get --purge -y autoremove && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+  curl -sS https://getcomposer.org/installer | php && \
+  mv composer.phar /usr/local/bin/composer && \
+  chmod a+x /usr/local/bin/composer
